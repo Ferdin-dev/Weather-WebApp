@@ -120,22 +120,100 @@ function getWeatherData() {
     });
 }
 
+// function renderWeatherData(data) {
+//   const {
+//     main: { temp, humidity, pressure },
+//     wind: { speed },
+//     visibility,
+//     weather,
+//     name,
+//     sys: { country, sunrise, sunset },
+//     dt
+//   } = data;
+
+//   const sunriseTime = new Date(sunrise * 1000).toLocaleTimeString();
+//   const sunsetTime = new Date(sunset * 1000).toLocaleTimeString();
+//   const currentTime = new Date(dt * 1000).toLocaleTimeString();
+
+//   const { description, icon } = weather[0];
+
+//   // Fetch the complete name of the country
+//   const weatherIcon = weather[0].icon;
+//   const countryUrl = `https://restcountries.com/v3/alpha/${country}`;
+
+//   fetch(countryUrl)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error("Country not found");
+//       }
+//       return response.json();
+//     })
+//     .then(countryData => {
+//       const countryName = countryData[0].name.common;
+
+//       weatherImageElement.src = `https://openweathermap.org/img/wn/${weatherIcon}.png`;
+//       weatherImageElement.style.width = '5rem';
+//       weatherImageElement.style.height = '100%';
+//       weatherTempElement.textContent = `${Math.round(temp)} °C`;
+//       cityNameElement.textContent = name;
+//       cityNameCountryElement.textContent = `${name},`;
+//       countryNameElement.textContent = countryName;
+//       currentTimeElement.textContent = currentTime;
+//       weatherDescElement.textContent = description;
+//       weatherWindElement.textContent = `${(speed * 3.6).toFixed(0)} Km/h`;
+//       weatherHumidityElement.textContent = `${humidity}%`;
+//       weathervisibilityElement.textContent = `${(visibility / 1000).toFixed(0)} Km`;
+//       weatherPressureElement.textContent = `${pressure} hPa`;
+//     })
+//     .catch(error => {
+//       console.error('Error:', error);
+//       alert('City not found. Please enter a valid city name.');
+//     });
+// }
+
+// Render function updated *****************
+
 function renderWeatherData(data) {
   const {
-    main: { temp, humidity, pressure },
-    wind: { speed },
+    main,
+    wind,
     visibility,
     weather,
     name,
-    sys: { country, sunrise, sunset },
+    sys,
     dt
   } = data;
+
+  if (!main || !wind || !weather || !name || !sys || !dt) {
+    console.error('Invalid weather data:', data);
+    alert('Invalid weather data. Please try again.');
+    return;
+  }
+
+  const {
+    temp,
+    humidity,
+    pressure
+  } = main;
+
+  const {
+    speed
+  } = wind;
+
+  const {
+    description,
+    icon
+  } = weather[0];
+
+  const {
+    country,
+    sunrise,
+    sunset
+  } = sys;
 
   const sunriseTime = new Date(sunrise * 1000).toLocaleTimeString();
   const sunsetTime = new Date(sunset * 1000).toLocaleTimeString();
   const currentTime = new Date(dt * 1000).toLocaleTimeString();
-
-  const { description, icon } = weather[0];
 
   // Fetch the complete name of the country
   const weatherIcon = weather[0].icon;
@@ -170,7 +248,6 @@ function renderWeatherData(data) {
       alert('City not found. Please enter a valid city name.');
     });
 }
-
 
 
 
